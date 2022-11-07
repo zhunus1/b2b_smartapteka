@@ -1,6 +1,7 @@
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 from users.models import AppUser
+from products.models import Product
 # Create your models here.
 
 class Manager(models.Model):
@@ -126,3 +127,49 @@ class Order(models.Model):
 
     def __str__(self):
         return self.pk
+
+
+class OrderItem(models.Model):
+    ORDER_STATUSES = (
+        ('Deleted', 'Удалён из 1С'),
+        ('Added', 'Добавлен в 1С'),
+        ('Changed', 'Изменён в 1С'),
+        ('Accepted', 'Подтвержден в 1С'),
+    )
+
+    status = models.CharField(max_length=13, choices=ORDER_STATUSES)
+
+    comment = models.TextField(
+        verbose_name = "Comment",
+    )
+
+    order = models.ForeignKey(
+        verbose_name = "Order",
+        to = Order, 
+        on_delete = models.CASCADE
+    )
+
+    product = models.ForeignKey(
+        verbose_name = "Product",
+        to = Product, 
+        on_delete = models.CASCADE
+    )
+
+    created = models.DateTimeField(
+        verbose_name = "Created",
+        auto_now_add = True,
+    )
+
+    updated = models.DateTimeField(
+        verbose_name = "Updated",
+        auto_now = True,
+    )
+
+    class Meta:
+
+        verbose_name = "Order item"
+        verbose_name_plural = "Order items"
+        ordering = ('-created',)
+
+    def __str__(self):
+        return "Order №%s" % self.order.pk

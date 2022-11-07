@@ -37,8 +37,10 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'rest_framework',
     'phonenumber_field',
+    'djmoney',
     'users.apps.UsersConfig',
     'pharmacies.apps.PharmaciesConfig',
+    'products.apps.ProductsConfig',
 ]
 
 MIDDLEWARE = [
